@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>시티투어 - 효빈광역시</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style> 
+        body { font-family: 'Noto Sans KR', sans-serif; } 
+        /* 모달 스타일 */
+        .modal {
+            transition: opacity 0.2s ease-in-out;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-content {
+            transform: scale(0.95);
+            transition: transform 0.2s ease-in-out;
+        }
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex flex-col relative">
+    <!-- 헤더 -->
+    <header class="bg-[#1e293b] text-white">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex justify-between items-center">
+            <div class="flex items-center cursor-pointer gap-3" onclick="location.href='index.html'">
+                <img src="logo.png" alt="효빈광역시 로고" class="h-10 w-auto object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                <div class="w-32 h-9 bg-white rounded hidden items-center justify-center text-slate-500 text-xs font-bold shadow-md">[로고 이미지]</div>
+                <span class="text-2xl font-bold tracking-wider">효빈광역시</span>
+            </div>
+            <div class="flex items-center space-x-5 text-gray-300">
+                <button onclick="location.href='index.html'" class="hover:text-white flex items-center gap-1">
+                    <i data-lucide="home" class="w-5 h-5"></i>
+                    <span class="text-sm font-bold">메인으로</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="w-full bg-blue-700 py-12 text-center text-white">
+        <h1 class="text-4xl font-black mb-3">효빈 시티투어</h1>
+        <p class="text-slate-200">2층 버스를 타고 떠나는 효빈의 낭만 여행</p>
+    </div>
+
+    <main class="max-w-6xl mx-auto px-4 py-10 w-full mb-20">
+        
+        <!-- 대표 코스 안내 -->
+        <div class="space-y-6 mb-12">
+            <div class="bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden flex flex-col md:flex-row">
+                <div class="md:w-1/3 bg-blue-100 flex items-center justify-center p-6 text-blue-600">
+                    <i data-lucide="sun" class="w-16 h-16"></i>
+                </div>
+                <div class="p-6 md:w-2/3">
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">주간 해안 코스 (Blue Line)</h3>
+                    <p class="text-sm text-slate-600 mb-4">효빈항과 탄성군의 아름다운 해안선을 따라 달리는 코스입니다.</p>
+                    <ul class="text-xs text-slate-500 space-y-1 mb-4">
+                        <li><strong>운행시간:</strong> 09:30 ~ 17:00 (1일 6회)</li>
+                        <li><strong>주요경유지:</strong> 효빈역 → 효빈항 → 고해읍(감귤농장) → 도변 해변 → 아논타워</li>
+                    </ul>
+                    <button onclick="openBookingModal('주간 해안 코스')" class="bg-blue-600 text-white px-4 py-2 rounded text-sm font-bold hover:bg-blue-700 transition">예약하기</button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden flex flex-col md:flex-row">
+                <div class="md:w-1/3 bg-purple-100 flex items-center justify-center p-6 text-purple-600">
+                    <i data-lucide="moon" class="w-16 h-16"></i>
+                </div>
+                <div class="p-6 md:w-2/3">
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">야간 도심 코스 (Night View)</h3>
+                    <p class="text-sm text-slate-600 mb-4">효빈의 화려한 야경과 낭만적인 밤바다를 즐기는 코스입니다.</p>
+                    <ul class="text-xs text-slate-500 space-y-1 mb-4">
+                        <li><strong>운행시간:</strong> 19:00 ~ 21:30 (1일 1회, 금/토 운행)</li>
+                        <li><strong>주요경유지:</strong> 효빈역 → 아논타워(야경) → 효빈대교 → 구도심 카페거리</li>
+                    </ul>
+                    <button onclick="openBookingModal('야간 도심 코스')" class="bg-purple-600 text-white px-4 py-2 rounded text-sm font-bold hover:bg-purple-700 transition">예약하기</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 전체 노선 안내 -->
+        <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+            <i data-lucide="map" class="text-blue-600"></i> 전체 노선 안내
+        </h3>
+        <p class="text-sm text-slate-500 mb-4">* 노선명을 클릭하면 상세 정보를 볼 수 있습니다.</p>
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-8">
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left text-slate-600 min-w-[800px]">
+                    <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                        <tr>
+                            <th class="px-6 py-3">노선명</th>
+                            <th class="px-6 py-3">기점 (출발)</th>
+                            <th class="px-6 py-3">종점 (도착)</th>
+                            <th class="px-6 py-3">주요 경유지 (코스 특징)</th>
+                            <th class="px-6 py-3 w-24 text-center">예약</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        <tr class="hover:bg-slate-50 cursor-pointer" onclick="openRouteInfo('T01')">
+                            <td class="px-6 py-4 font-bold text-blue-600">T01</td>
+                            <td class="px-6 py-4">효빈역<br><span class="text-xs text-slate-400">동구 사가당동</span></td>
+                            <td class="px-6 py-4">효빈역<br><span class="text-xs text-slate-400">동구 사가당동</span></td>
+                            <td class="px-6 py-4">중구, 서구, 북구 투어 (도심 순환)</td>
+                            <td class="px-6 py-4 text-center"><button onclick="event.stopPropagation(); openBookingModal('T01 노선')" class="bg-slate-800 text-white px-3 py-1 rounded text-xs hover:bg-slate-700">예약</button></td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 cursor-pointer" onclick="openRouteInfo('T02')">
+                            <td class="px-6 py-4 font-bold text-blue-600">T02</td>
+                            <td class="px-6 py-4">효빈역</td>
+                            <td class="px-6 py-4">효빈역</td>
+                            <td class="px-6 py-4">청엽구, 창전구 투어 (문화 예술)</td>
+                            <td class="px-6 py-4 text-center"><button onclick="event.stopPropagation(); openBookingModal('T02 노선')" class="bg-slate-800 text-white px-3 py-1 rounded text-xs hover:bg-slate-700">예약</button></td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 bg-pink-50/50 cursor-pointer" onclick="openRouteInfo('T03')">
+                            <td class="px-6 py-4 font-bold text-pink-600">T03</td>
+                            <td class="px-6 py-4">효빈역</td>
+                            <td class="px-6 py-4">효빈역</td>
+                            <td class="px-6 py-4 font-bold text-slate-800">애니메이션 성지순례 투어 (Special)</td>
+                            <td class="px-6 py-4 text-center"><button onclick="event.stopPropagation(); openBookingModal('T03 성지순례')" class="bg-pink-600 text-white px-3 py-1 rounded text-xs hover:bg-pink-700">예약</button></td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 cursor-pointer" onclick="openRouteInfo('T04')">
+                            <td class="px-6 py-4 font-bold text-blue-600">T04</td>
+                            <td class="px-6 py-4">효빈역</td>
+                            <td class="px-6 py-4">효빈역</td>
+                            <td class="px-6 py-4">중구, 남구 투어 (역사 탐방)</td>
+                            <td class="px-6 py-4 text-center"><button onclick="event.stopPropagation(); openBookingModal('T04 노선')" class="bg-slate-800 text-white px-3 py-1 rounded text-xs hover:bg-slate-700">예약</button></td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 cursor-pointer" onclick="openRouteInfo('T05')">
+                            <td class="px-6 py-4 font-bold text-blue-600">T05</td>
+                            <td class="px-6 py-4">효빈역</td>
+                            <td class="px-6 py-4">효빈역</td>
+                            <td class="px-6 py-4">북구 동부, 안천구 투어</td>
+                            <td class="px-6 py-4 text-center"><button onclick="event.stopPropagation(); openBookingModal('T05 노선')" class="bg-slate-800 text-white px-3 py-1 rounded text-xs hover:bg-slate-700">예약</button></td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 cursor-pointer" onclick="openRouteInfo('T06')">
+                            <td class="px-6 py-4 font-bold text-blue-600">T06</td>
+                            <td class="px-6 py-4">효빈역</td>
+                            <td class="px-6 py-4">효빈역</td>
+                            <td class="px-6 py-4">동구, 안천구 투어</td>
+                            <td class="px-6 py-4 text-center"><button onclick="event.stopPropagation(); openBookingModal('T06 노선')" class="bg-slate-800 text-white px-3 py-1 rounded text-xs hover:bg-slate-700">예약</button></td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 cursor-pointer" onclick="openRouteInfo('T07')">
+                            <td class="px-6 py-4 font-bold text-green-600">T07</td>
+                            <td class="px-6 py-4">효빈역</td>
+                            <td class="px-6 py-4">효빈역</td>
+                            <td class="px-6 py-4">탄성 북부 투어 (자연 생태)</td>
+                            <td class="px-6 py-4 text-center"><button onclick="event.stopPropagation(); openBookingModal('T07 노선')" class="bg-slate-800 text-white px-3 py-1 rounded text-xs hover:bg-slate-700">예약</button></td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 cursor-pointer" onclick="openRouteInfo('T08')">
+                            <td class="px-6 py-4 font-bold text-green-600">T08</td>
+                            <td class="px-6 py-4">효빈역</td>
+                            <td class="px-6 py-4">효빈역</td>
+                            <td class="px-6 py-4">탄성 남부 투어 (힐링 로드)</td>
+                            <td class="px-6 py-4 text-center"><button onclick="event.stopPropagation(); openBookingModal('T08 노선')" class="bg-slate-800 text-white px-3 py-1 rounded text-xs hover:bg-slate-700">예약</button></td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 bg-blue-50/50 cursor-pointer" onclick="openRouteInfo('T09')">
+                            <td class="px-6 py-4 font-bold text-indigo-600">T09</td>
+                            <td class="px-6 py-4">효빈역</td>
+                            <td class="px-6 py-4">효빈역</td>
+                            <td class="px-6 py-4 font-bold text-slate-800">해수욕장 순례 (Ocean View)</td>
+                            <td class="px-6 py-4 text-center"><button onclick="event.stopPropagation(); openBookingModal('T09 해수욕장')" class="bg-indigo-600 text-white px-3 py-1 rounded text-xs hover:bg-indigo-700">예약</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="mt-8 bg-slate-50 p-6 rounded-lg text-sm text-slate-600 border border-slate-200">
+            <h4 class="font-bold mb-2 text-slate-800 flex items-center gap-2"><i data-lucide="info" class="w-4 h-4"></i> 이용 요금 및 안내</h4>
+            <ul class="list-disc list-inside space-y-1">
+                <li>성인: 15,000원 / 청소년: 10,000원 / 어린이: 8,000원</li>
+                <li>효빈시민 20% 할인 (신분증 지참 시)</li>
+                <li>HAF 패스포트 소지자: 주간 코스 무료 탑승 (축제 기간 한정)</li>
+                <li>출발 장소: 효빈역 시티투어 승강장 (동구 사가당동)</li>
+            </ul>
+        </div>
+    </main>
+
+    <!-- 노선 상세 설명 모달 -->
+    <div id="route-info-modal" class="modal fixed inset-0 z-50 flex items-center justify-center px-4">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeRouteInfo()"></div>
+        <div class="modal-content bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden relative z-10">
+            <div class="bg-slate-800 p-5 text-white flex justify-between items-center">
+                <h3 class="font-bold text-lg" id="modal-route-title">노선 상세 정보</h3>
+                <button onclick="closeRouteInfo()" class="hover:bg-slate-700 p-1 rounded-full"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <div class="p-6">
+                <div class="space-y-4">
+                    <div class="flex items-center gap-2">
+                        <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-bold" id="modal-route-id">T00</span>
+                        <h4 class="font-bold text-xl text-slate-800" id="modal-route-name">코스명</h4>
+                    </div>
+                    
+                    <div class="border-t border-b border-slate-100 py-4 grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <div class="text-slate-400 text-xs mb-1">기점 (출발)</div>
+                            <div class="font-bold text-slate-700">효빈역</div>
+                            <div class="text-xs text-slate-500">동구 사가당동</div>
+                        </div>
+                        <div>
+                            <div class="text-slate-400 text-xs mb-1">종점 (도착)</div>
+                            <div class="font-bold text-slate-700">효빈역</div>
+                            <div class="text-xs text-slate-500">동구 사가당동</div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h5 class="font-bold text-slate-700 mb-2 flex items-center gap-1"><i data-lucide="map-pin" class="w-4 h-4 text-red-500"></i> 주요 경유지</h5>
+                        <p class="text-sm text-slate-600 bg-slate-50 p-3 rounded leading-relaxed" id="modal-route-desc">
+                            경유지 설명
+                        </p>
+                    </div>
+
+                    <div class="bg-blue-50 p-4 rounded-lg flex justify-between items-center mt-4">
+                        <div class="text-blue-800 text-sm font-bold">이 코스로 떠나보시겠습니까?</div>
+                        <button onclick="closeRouteInfo(); setTimeout(() => openBookingModal(document.getElementById('modal-route-id').innerText + ' 노선'), 200);" class="bg-blue-600 text-white px-4 py-2 rounded text-xs font-bold hover:bg-blue-700 shadow-sm">지금 예약하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 예약 모달 -->
+    <div id="booking-modal" class="modal fixed inset-0 z-50 flex items-center justify-center px-4">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeBookingModal()"></div>
+        <div class="modal-content bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden relative z-10">
+            <div class="bg-slate-800 p-5 text-white flex justify-between items-center">
+                <h3 class="font-bold text-lg">시티투어 예약</h3>
+                <button onclick="closeBookingModal()" class="hover:bg-slate-700 p-1 rounded-full"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <div class="p-6">
+                <form onsubmit="event.preventDefault(); alert('예약이 완료되었습니다!\\n예약번호: ' + Math.floor(Math.random()*1000000)); closeBookingModal();">
+                    <div class="mb-4">
+                        <label class="block text-sm font-bold text-slate-700 mb-1">선택 노선</label>
+                        <input type="text" id="modal-course-name" class="w-full border border-slate-300 rounded px-3 py-2 bg-slate-50 text-slate-600" readonly>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-bold text-slate-700 mb-1">예약 날짜</label>
+                        <input type="date" class="w-full border border-slate-300 rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-bold text-slate-700 mb-1">인원</label>
+                        <div class="flex gap-2">
+                            <select class="w-full border border-slate-300 rounded px-3 py-2">
+                                <option>성인 1명</option>
+                                <option>성인 2명</option>
+                                <option>성인 3명</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-sm font-bold text-slate-700 mb-1">예약자 성명</label>
+                        <input type="text" class="w-full border border-slate-300 rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="이름을 입력하세요" required>
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition shadow-lg">결제 및 예약하기</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-white border-t border-slate-200 mt-auto pt-10 pb-12 text-[13px] tracking-tight relative z-10">
+        <div class="max-w-6xl mx-auto px-4 text-center text-slate-400">COPYRIGHT © 2023 HYOBIN CITY. ALL RIGHTS RESERVED.</div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        // 노선 데이터
+        const routeData = {
+            'T01': { name: '도심 순환 투어', desc: '중구, 서구, 북구의 주요 도심 관광지와 쇼핑 센터를 순환하는 기본 코스입니다.' },
+            'T02': { name: '문화 예술 투어', desc: '청엽구와 창전구의 미술관, 박물관, 문화 거리를 탐방하는 예술 중심 코스입니다.' },
+            'T03': { name: '애니메이션 성지순례', desc: '효빈시 내 주요 애니메이션 배경지와 성지를 둘러보는 특별 테마 코스입니다.' },
+            'T04': { name: '역사 탐방 투어', desc: '중구와 남구에 위치한 근대 역사 문화재와 유적지를 돌아보는 교육 코스입니다.' },
+            'T05': { name: '북구 동부 투어', desc: '북구 동부와 안천구의 주거 단지 및 공원을 연결하는 생활 밀착형 코스입니다.' },
+            'T06': { name: '동구 안천 투어', desc: '동구의 전통시장과 안천구의 생태 공원을 연계한 힐링 코스입니다.' },
+            'T07': { name: '탄성 북부 투어', desc: '탄성군 북부의 수려한 산세와 자연 휴양림을 즐길 수 있는 에코 투어입니다.' },
+            'T08': { name: '탄성 남부 투어', desc: '탄성군 남부의 조용한 어촌 마을과 해안 도로를 달리는 드라이브 코스입니다.' },
+            'T09': { name: '해수욕장 순례', desc: '효빈시의 유명 해수욕장들을 모두 경유하는 여름철 인기 1순위 코스입니다.' }
+        };
+
+        function openRouteInfo(id) {
+            const data = routeData[id];
+            if (data) {
+                document.getElementById('modal-route-id').innerText = id;
+                document.getElementById('modal-route-name').innerText = data.name;
+                document.getElementById('modal-route-desc').innerText = data.desc;
+                
+                const modal = document.getElementById('route-info-modal');
+                modal.classList.remove('hidden');
+                setTimeout(() => { modal.classList.add('active'); }, 10);
+            }
+        }
+
+        function closeRouteInfo() {
+            const modal = document.getElementById('route-info-modal');
+            modal.classList.remove('active');
+            setTimeout(() => { modal.classList.add('hidden'); }, 200);
+        }
+
+        function openBookingModal(courseName) {
+            document.getElementById('modal-course-name').value = courseName;
+            const modal = document.getElementById('booking-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => { modal.classList.add('active'); }, 10);
+        }
+
+        function closeBookingModal() {
+            const modal = document.getElementById('booking-modal');
+            modal.classList.remove('active');
+            setTimeout(() => { modal.classList.add('hidden'); }, 200);
+        }
+        
+        // 초기 로딩 시 모달 숨김 처리
+        document.getElementById('booking-modal').classList.add('hidden');
+        document.getElementById('route-info-modal').classList.add('hidden');
+    </script>
+</body>
+</html>
