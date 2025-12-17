@@ -6,24 +6,14 @@
     <title>효빈애니메이션본부</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts (Noto Sans KR) -->
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-    <!-- Lucide Icons (UMD 버전 명시) -->
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        body { font-family: 'Noto Sans KR', sans-serif; transition: background-color 0.3s, color 0.3s; }
+        body { font-family: 'Noto Sans KR', sans-serif; }
         
-        /* Dark Mode Styles */
-        body.dark { background-color: #111827; color: #f3f4f6; }
-        body.dark .bg-white { background-color: #1f2937; }
-        body.dark .bg-slate-50 { background-color: #111827; }
-        body.dark .text-slate-800 { color: #f3f4f6; }
-        body.dark .text-slate-600 { color: #d1d5db; }
-        body.dark .text-slate-500 { color: #9ca3af; }
-        body.dark .border-slate-200 { border-color: #374151; }
-        body.dark .group:hover .bg-purple-50 { background-color: #374151; }
-        
-        /* Custom Animations */
+        /* 커스텀 애니메이션 */
         @keyframes float {
             0% { transform: translateY(0px); }
             50% { transform: translateY(-10px); }
@@ -32,31 +22,70 @@
         .animate-float { animation: float 3s ease-in-out infinite; }
         .animate-float-delay { animation: float 3s ease-in-out infinite; animation-delay: 1.5s; }
         
-        /* Toast Notification */
-        #toast-container {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px);
-            background-color: rgba(88, 28, 135, 0.95); color: white; padding: 12px 24px;
-            border-radius: 9999px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s;
-            z-index: 100; opacity: 0; pointer-events: none; display: flex; align-items: center; gap: 8px; font-weight: 500;
+        /* 다크모드 스타일 */
+        body.dark { background-color: #111827; color: #f3f4f6; }
+        body.dark .bg-white { background-color: #1f2937; }
+        body.dark .bg-slate-50 { background-color: #111827; }
+        body.dark .text-slate-800 { color: #f3f4f6; }
+        body.dark .text-slate-600 { color: #d1d5db; }
+        body.dark .text-slate-500 { color: #9ca3af; }
+        body.dark .border-slate-200 { border-color: #374151; }
+        body.dark .bg-slate-100 { background-color: #374151; }
+        
+        /* 모달 스타일 */
+        .modal {
+            transition: opacity 0.3s ease-in-out, visibility 0.3s;
+            opacity: 0;
+            visibility: hidden;
         }
-        #toast-container.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-    </script>
-</head>
-<body class="bg-slate-50 min-h-screen flex flex-col relative text-slate-800" style="background-color: #f8fafc;">
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            transform: scale(0.95);
+            transition: transform 0.3s ease-in-out;
+        }
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
 
-    <!-- 1. 유틸리티 바 (본청 연결) -->
+        /* 페이지네이션 스타일 (index.html 스타일 차용) */
+        .menu-page { 
+            display: none; 
+            opacity: 0; 
+            transition: opacity 0.3s ease-in-out; 
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 1rem;
+            padding: 0.5rem;
+        }
+        .menu-page.active { 
+            display: grid; 
+            opacity: 1; 
+        }
+        .dot { transition: all 0.3s; }
+        
+        /* 모바일 반응형 */
+        @media (max-width: 768px) {
+            .menu-page { 
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex flex-col relative text-slate-800">
+
+    <!-- 1. 유틸리티 바 -->
     <div class="bg-slate-900 text-slate-300 text-xs py-2 px-4 border-b border-slate-700">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
             <div class="flex gap-3">
                 <a href="index.html" class="hover:text-white transition flex items-center gap-1">
-                    <i data-lucide="arrow-left-circle" class="w-3 h-3"></i> 효빈광역시청 바로가기
+                    <i data-lucide="arrow-left-circle" class="w-3 h-3 inline-block"></i> 효빈광역시청 바로가기
                 </a>
             </div>
             <div class="flex gap-3">
                 <button onclick="toggleDarkMode()" id="theme-btn" class="hover:text-white transition">Dark Mode</button>
-                <span>|</span>
-                <button class="hover:text-white transition">Login</button>
             </div>
         </div>
     </div>
@@ -65,7 +94,7 @@
     <header class="bg-white/90 backdrop-blur-md sticky top-0 z-40 border-b border-purple-100 shadow-sm transition-colors duration-300 dark:bg-gray-900/90 dark:border-gray-700">
         <div class="max-w-6xl mx-auto px-4 h-20 flex justify-between items-center">
             <!-- 로고 -->
-            <div class="flex items-center gap-2 cursor-pointer" onclick="location.href='#'">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="location.href='animation_hq.html'">
                 <div class="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center text-white shadow-lg shadow-purple-200 dark:shadow-none">
                     <i data-lucide="clapperboard" class="w-6 h-6"></i>
                 </div>
@@ -77,17 +106,17 @@
 
             <!-- 데스크탑 메뉴 -->
             <nav class="hidden md:flex space-x-8 font-bold text-slate-600 dark:text-slate-300">
-                <a href="#" class="hover:text-purple-600 dark:hover:text-purple-400 transition py-2" onclick="showToast('본부소개 페이지')">본부소개</a>
-                <a href="#" class="hover:text-purple-600 dark:hover:text-purple-400 transition py-2" onclick="showToast('제작지원 사업안내')">제작지원</a>
-                <a href="#" class="hover:text-purple-600 dark:hover:text-purple-400 transition py-2" onclick="showToast('시설/장비 예약')">시설예약</a>
-                <a href="#" class="hover:text-purple-600 dark:hover:text-purple-400 transition py-2" onclick="showToast('아카데미 교육')">아카데미</a>
-                <a href="#" class="hover:text-purple-600 dark:hover:text-purple-400 transition py-2 flex items-center gap-1 text-purple-600 dark:text-purple-400" onclick="showToast('HAF 2026 페이지')">
-                    <i data-lucide="star" class="w-4 h-4 fill-current"></i> HAF 2026
-                </a>
+                <button class="hover:text-purple-600 dark:hover:text-purple-400 transition py-2" onclick="location.href='hq_intro.html'">본부소개</button>
+                <button class="hover:text-purple-600 dark:hover:text-purple-400 transition py-2" onclick="location.href='support.html'">제작지원</button>
+                <button class="hover:text-purple-600 dark:hover:text-purple-400 transition py-2" onclick="location.href='reservation.html'">시설예약</button>
+                <button class="hover:text-purple-600 dark:hover:text-purple-400 transition py-2" onclick="location.href='academy.html'">아카데미</button>
+                <button class="hover:text-purple-600 dark:hover:text-purple-400 transition py-2 flex items-center gap-1 text-purple-600 dark:text-purple-400" onclick="location.href='culture.html'">
+                    <i data-lucide="star" class="w-4 h-4 fill-current inline-block"></i> HAF 2026
+                </button>
             </nav>
 
             <!-- 모바일 메뉴 버튼 -->
-            <button class="md:hidden text-slate-800 dark:text-white" onclick="showToast('모바일 메뉴 준비중')">
+            <button class="md:hidden text-slate-800 dark:text-white" onclick="openModal('모바일 메뉴', '모바일 메뉴는 현재 준비 중입니다.')">
                 <i data-lucide="menu" class="w-7 h-7"></i>
             </button>
         </div>
@@ -95,7 +124,7 @@
 
     <!-- 3. 히어로 섹션 -->
     <section class="relative bg-gradient-to-r from-purple-700 to-indigo-800 text-white overflow-hidden h-[450px] flex items-center">
-        <!-- 배경 장식 (패턴) -->
+        <!-- 배경 패턴 -->
         <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 30px 30px;"></div>
         
         <div class="max-w-6xl mx-auto px-4 w-full relative z-10 flex flex-col md:flex-row justify-between items-center">
@@ -112,75 +141,113 @@
                     글로벌 콘텐츠 산업의 미래를 이끌어갑니다.
                 </p>
                 <div class="flex gap-4 justify-center md:justify-start">
-                    <button class="bg-white text-purple-800 px-8 py-3 rounded-xl font-bold hover:bg-purple-50 transition shadow-lg flex items-center gap-2" onclick="showToast('지원사업 공고 확인')">
-                        지원사업 공고 <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    <button class="bg-white text-purple-800 px-8 py-3 rounded-xl font-bold hover:bg-purple-50 transition shadow-lg flex items-center gap-2" onclick="openModal('지원사업 공고', '현재 진행중인 지원사업: <br>- 단편 애니메이션 제작지원<br>- 뉴미디어 콘텐츠 제작지원')">
+                        지원사업 공고 <i data-lucide="arrow-right" class="w-4 h-4 inline-block"></i>
                     </button>
-                    <button class="bg-purple-900/50 text-white border border-white/30 px-8 py-3 rounded-xl font-bold hover:bg-purple-900/80 transition backdrop-blur-md" onclick="showToast('시설안내 보기')">
+                    <button class="bg-purple-900/50 text-white border border-white/30 px-8 py-3 rounded-xl font-bold hover:bg-purple-900/80 transition backdrop-blur-md" onclick="location.href='hq_intro.html'">
                         시설안내
                     </button>
                 </div>
             </div>
             
-            <!-- 우측 일러스트/아이콘 영역 -->
+            <!-- 우측 일러스트 영역 -->
             <div class="md:w-1/2 flex justify-center relative h-64 w-full">
-                <!-- 중앙 모니터/태블릿 -->
-                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-40 bg-white rounded-lg shadow-2xl border-4 border-slate-800 flex items-center justify-center z-10">
+                <!-- 중앙 모니터 -->
+                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-40 bg-white rounded-lg shadow-2xl border-4 border-slate-800 flex items-center justify-center z-10 cursor-pointer hover:scale-105 transition" onclick="location.href='culture.html'">
                     <div class="text-slate-800 font-black text-2xl flex flex-col items-center">
-                        <i data-lucide="play-circle" class="w-10 h-10 text-purple-600 mb-2"></i>
-                        ON AIR
+                        <i data-lucide="play-circle" class="w-10 h-10 text-purple-600 mb-2 inline-block"></i>
+                        <span>ON AIR</span>
                     </div>
                 </div>
-                <!-- 떠다니는 아이콘들 -->
-                <div class="absolute top-0 right-10 bg-yellow-400 p-4 rounded-full shadow-lg animate-float text-slate-900 z-20">
+                <!-- 아이콘 장식 -->
+                <div class="absolute top-0 right-10 bg-yellow-400 p-4 rounded-full shadow-lg animate-float text-slate-900 z-20 hidden md:block cursor-pointer" onclick="openModal('창작', '당신의 아이디어를 펼쳐보세요!')">
                     <i data-lucide="pen-tool" class="w-8 h-8"></i>
                 </div>
-                <div class="absolute bottom-0 left-10 bg-pink-500 p-4 rounded-full shadow-lg animate-float-delay text-white z-20">
+                <div class="absolute bottom-0 left-10 bg-pink-500 p-4 rounded-full shadow-lg animate-float-delay text-white z-20 hidden md:block cursor-pointer" onclick="openModal('사운드', '생동감 넘치는 사운드 지원')">
                     <i data-lucide="music" class="w-8 h-8"></i>
-                </div>
-                <div class="absolute top-10 left-0 bg-blue-500 p-3 rounded-lg shadow-lg transform -rotate-12 z-0">
-                    <i data-lucide="film" class="w-6 h-6 text-white"></i>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 4. 주요 서비스 바로가기 (아이콘 그리드) -->
+    <!-- 4. 주요 서비스 바로가기 (페이지네이션 적용) -->
     <section class="max-w-6xl mx-auto px-4 -mt-10 relative z-20 mb-16">
-        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 md:p-10 border border-slate-100 dark:border-gray-700 grid grid-cols-2 md:grid-cols-5 gap-4">
-            <a href="#" class="flex flex-col items-center gap-3 group p-4 rounded-xl hover:bg-purple-50 transition cursor-pointer" onclick="showToast('제작지원사업 안내')">
-                <div class="w-14 h-14 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center group-hover:bg-purple-600 group-hover:text-white transition duration-300">
-                    <i data-lucide="coins" class="w-7 h-7"></i>
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 md:p-10 border border-slate-100 dark:border-gray-700 min-h-[180px]">
+            
+            <!-- 메뉴 컨테이너 -->
+            <div id="menu-container" class="relative w-full overflow-hidden">
+                <!-- PAGE 0: 주요 메뉴 -->
+                <div id="page-0" class="menu-page active">
+                    <button class="flex flex-col items-center gap-3 group p-4 rounded-xl hover:bg-purple-50 transition cursor-pointer" onclick="location.href='hq_intro.html'">
+                        <div class="w-14 h-14 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center group-hover:bg-purple-600 group-hover:text-white transition duration-300">
+                            <i data-lucide="building" class="w-7 h-7"></i>
+                        </div>
+                        <span class="font-bold text-slate-700 dark:text-gray-300 group-hover:text-purple-700 transition">본부소개</span>
+                    </button>
+                    <button class="flex flex-col items-center gap-3 group p-4 rounded-xl hover:bg-purple-50 transition cursor-pointer" onclick="location.href='support.html'">
+                        <div class="w-14 h-14 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center group-hover:bg-purple-600 group-hover:text-white transition duration-300">
+                            <i data-lucide="coins" class="w-7 h-7"></i>
+                        </div>
+                        <span class="font-bold text-slate-700 dark:text-gray-300 group-hover:text-purple-700 transition">제작지원</span>
+                    </button>
+                    <button class="flex flex-col items-center gap-3 group p-4 rounded-xl hover:bg-purple-50 transition cursor-pointer" onclick="location.href='reservation.html'">
+                        <div class="w-14 h-14 rounded-full bg-pink-100 text-pink-600 flex items-center justify-center group-hover:bg-pink-600 group-hover:text-white transition duration-300">
+                            <i data-lucide="calendar-check" class="w-7 h-7"></i>
+                        </div>
+                        <span class="font-bold text-slate-700 dark:text-gray-300 group-hover:text-pink-700 transition">시설예약</span>
+                    </button>
+                    <button class="flex flex-col items-center gap-3 group p-4 rounded-xl hover:bg-purple-50 transition cursor-pointer" onclick="location.href='academy.html'">
+                        <div class="w-14 h-14 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition duration-300">
+                            <i data-lucide="graduation-cap" class="w-7 h-7"></i>
+                        </div>
+                        <span class="font-bold text-slate-700 dark:text-gray-300 group-hover:text-indigo-700 transition">아카데미</span>
+                    </button>
+                    <button class="flex flex-col items-center gap-3 group p-4 rounded-xl hover:bg-purple-50 transition cursor-pointer" onclick="location.href='culture.html'">
+                        <div class="w-14 h-14 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition duration-300">
+                            <i data-lucide="star" class="w-7 h-7"></i>
+                        </div>
+                        <span class="font-bold text-slate-700 dark:text-gray-300 group-hover:text-blue-700 transition">HAF2026</span>
+                    </button>
                 </div>
-                <span class="font-bold text-slate-700 dark:text-gray-300 group-hover:text-purple-700 transition">제작지원</span>
-            </a>
-            <a href="#" class="flex flex-col items-center gap-3 group p-4 rounded-xl hover:bg-purple-50 transition cursor-pointer" onclick="showToast('교육 프로그램 신청')">
-                <div class="w-14 h-14 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition duration-300">
-                    <i data-lucide="graduation-cap" class="w-7 h-7"></i>
+
+                <!-- PAGE 1: 추가 메뉴 -->
+                <div id="page-1" class="menu-page">
+                    <button class="flex flex-col items-center gap-3 group p-4 rounded-xl hover:bg-purple-50 transition cursor-pointer" onclick="location.href='tour.html'">
+                        <div class="w-14 h-14 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center group-hover:bg-orange-600 group-hover:text-white transition duration-300">
+                            <i data-lucide="map" class="w-7 h-7"></i>
+                        </div>
+                        <span class="font-bold text-slate-700 dark:text-gray-300 group-hover:text-orange-700 transition">성지순례</span>
+                    </button>
+                    <button class="flex flex-col items-center gap-3 group p-4 rounded-xl hover:bg-purple-50 transition cursor-pointer" onclick="openModal('공지사항', '공지사항 게시판으로 이동합니다.')">
+                        <div class="w-14 h-14 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center group-hover:bg-slate-600 group-hover:text-white transition duration-300">
+                            <i data-lucide="megaphone" class="w-7 h-7"></i>
+                        </div>
+                        <span class="font-bold text-slate-700 dark:text-gray-300 group-hover:text-slate-700 transition">공지사항</span>
+                    </button>
+                    <button class="flex flex-col items-center gap-3 group p-4 rounded-xl hover:bg-purple-50 transition cursor-pointer" onclick="openModal('오시는 길', '효빈광역시 북구 영상문화로 24')">
+                        <div class="w-14 h-14 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center group-hover:bg-slate-600 group-hover:text-white transition duration-300">
+                            <i data-lucide="map-pin" class="w-7 h-7"></i>
+                        </div>
+                        <span class="font-bold text-slate-700 dark:text-gray-300 group-hover:text-slate-700 transition">오시는 길</span>
+                    </button>
+                     <button class="flex flex-col items-center gap-3 group p-4 rounded-xl hover:bg-purple-50 transition cursor-pointer" onclick="openModal('문의하기', '전화: 079-555-1921<br>이메일: help@hyobin.ani')">
+                        <div class="w-14 h-14 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center group-hover:bg-slate-600 group-hover:text-white transition duration-300">
+                            <i data-lucide="phone" class="w-7 h-7"></i>
+                        </div>
+                        <span class="font-bold text-slate-700 dark:text-gray-300 group-hover:text-slate-700 transition">문의하기</span>
+                    </button>
                 </div>
-                <span class="font-bold text-slate-700 dark:text-gray-300 group-hover:text-indigo-700 transition">교육신청</span>
-            </a>
-            <a href="#" class="flex flex-col items-center gap-3 group p-4 rounded-xl hover:bg-purple-50 transition cursor-pointer" onclick="showToast('스튜디오/장비 대여')">
-                <div class="w-14 h-14 rounded-full bg-pink-100 text-pink-600 flex items-center justify-center group-hover:bg-pink-600 group-hover:text-white transition duration-300">
-                    <i data-lucide="camera" class="w-7 h-7"></i>
-                </div>
-                <span class="font-bold text-slate-700 dark:text-gray-300 group-hover:text-pink-700 transition">장비대여</span>
-            </a>
-            <a href="#" class="flex flex-col items-center gap-3 group p-4 rounded-xl hover:bg-purple-50 transition cursor-pointer" onclick="showToast('입주기업 정보')">
-                <div class="w-14 h-14 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center group-hover:bg-orange-600 group-hover:text-white transition duration-300">
-                    <i data-lucide="building-2" class="w-7 h-7"></i>
-                </div>
-                <span class="font-bold text-slate-700 dark:text-gray-300 group-hover:text-orange-700 transition">입주기업</span>
-            </a>
-            <a href="#" class="flex flex-col items-center gap-3 group p-4 rounded-xl hover:bg-purple-50 transition cursor-pointer" onclick="showToast('영화제/행사 일정')">
-                <div class="w-14 h-14 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition duration-300">
-                    <i data-lucide="calendar-heart" class="w-7 h-7"></i>
-                </div>
-                <span class="font-bold text-slate-700 dark:text-gray-300 group-hover:text-blue-700 transition">행사일정</span>
-            </a>
+            </div>
+
+            <!-- 페이지네이션 도트 -->
+            <div class="flex justify-center mt-4 space-x-3">
+                <button onclick="changePage(0)" id="dot-0" class="dot w-3 h-3 rounded-full bg-purple-600 hover:scale-110 transition"></button>
+                <button onclick="changePage(1)" id="dot-1" class="dot w-3 h-3 rounded-full bg-slate-300 hover:bg-slate-400 hover:scale-110 transition"></button>
+            </div>
         </div>
     </section>
 
-    <!-- 5. 콘텐츠 섹션 (공지사항 & 갤러리) -->
+    <!-- 5. 콘텐츠 섹션 -->
     <section class="max-w-6xl mx-auto px-4 mb-20">
         <div class="flex flex-col md:flex-row gap-8">
             <!-- 왼쪽: 알림마당 -->
@@ -189,43 +256,36 @@
                     <h2 class="text-2xl font-black text-slate-800 dark:text-white flex items-center gap-2">
                         <span class="bg-purple-600 w-1.5 h-6 rounded-full"></span> 알림마당
                     </h2>
-                    <a href="#" class="text-sm text-slate-500 hover:text-purple-600 font-bold" onclick="showToast('공지사항 더보기')">+ 더보기</a>
+                    <button class="text-sm text-slate-500 hover:text-purple-600 font-bold" onclick="openModal('공지사항', '전체 공지사항 목록 페이지로 이동합니다. (준비중)')">+ 더보기</button>
                 </div>
                 <div class="bg-white dark:bg-gray-800 rounded-xl border border-slate-200 dark:border-gray-700 shadow-sm overflow-hidden">
                     <ul>
-                        <li class="border-b border-slate-100 dark:border-gray-700 p-4 hover:bg-purple-50 dark:hover:bg-gray-700 transition cursor-pointer group" onclick="showToast('공지: HAF 2026')">
+                        <li class="border-b border-slate-100 dark:border-gray-700 p-4 hover:bg-purple-50 dark:hover:bg-gray-700 transition cursor-pointer group" onclick="openNoticeModal(this)" data-title="2026 HAF (효빈 애니메이션 페스티벌) 참가작 모집 공고" data-date="2025.11.28" data-content="<p>2026년 효빈 애니메이션 페스티벌(HAF)의 참가작을 모집합니다.</p><br><p><strong>모집 기간:</strong> 2025.12.01 ~ 2026.02.28</p><p><strong>모집 분야:</strong> 단편 애니메이션, 장편 애니메이션, 웹툰 등</p><br><p>자세한 사항은 HAF 공식 홈페이지를 참조하시기 바랍니다.</p>">
                             <div class="flex justify-between items-center mb-1">
                                 <span class="bg-red-100 text-red-600 text-[11px] font-bold px-1.5 py-0.5 rounded">공지</span>
                                 <span class="text-slate-400 text-xs">2025.11.28</span>
                             </div>
                             <p class="text-slate-800 dark:text-gray-200 font-medium group-hover:text-purple-700 truncate">2026 HAF (효빈 애니메이션 페스티벌) 참가작 모집 공고</p>
                         </li>
-                        <li class="border-b border-slate-100 dark:border-gray-700 p-4 hover:bg-purple-50 dark:hover:bg-gray-700 transition cursor-pointer group" onclick="showToast('공지: 4분기 지원사업')">
+                        <li class="border-b border-slate-100 dark:border-gray-700 p-4 hover:bg-purple-50 dark:hover:bg-gray-700 transition cursor-pointer group" onclick="openNoticeModal(this)" data-title="2025년 4분기 뉴미디어 콘텐츠 제작지원 선정결과 발표" data-date="2025.11.25" data-content="<p>2025년 4분기 뉴미디어 콘텐츠 제작지원 사업의 선정 결과를 아래와 같이 공고합니다.</p><br><p><strong>선정 기업:</strong> (주)효빈미디어 등 5개사</p><br><p>선정된 기업에는 개별적으로 통보드렸으며, 협약 체결 일정은 추후 안내될 예정입니다.</p>">
                             <div class="flex justify-between items-center mb-1">
                                 <span class="bg-blue-100 text-blue-600 text-[11px] font-bold px-1.5 py-0.5 rounded">지원사업</span>
                                 <span class="text-slate-400 text-xs">2025.11.25</span>
                             </div>
                             <p class="text-slate-800 dark:text-gray-200 font-medium group-hover:text-purple-700 truncate">2025년 4분기 뉴미디어 콘텐츠 제작지원 선정결과 발표</p>
                         </li>
-                        <li class="border-b border-slate-100 dark:border-gray-700 p-4 hover:bg-purple-50 dark:hover:bg-gray-700 transition cursor-pointer group" onclick="showToast('공지: 렌더팜 점검')">
+                        <li class="border-b border-slate-100 dark:border-gray-700 p-4 hover:bg-purple-50 dark:hover:bg-gray-700 transition cursor-pointer group" onclick="openNoticeModal(this)" data-title="효빈 클라우드 렌더팜 정기 서버점검 안내 (12.01)" data-date="2025.11.20" data-content="<p>안정적인 서비스 제공을 위해 효빈 클라우드 렌더팜의 정기 서버 점검을 실시합니다.</p><br><p><strong>점검 일시:</strong> 2025.12.01(월) 00:00 ~ 06:00 (6시간)</p><p><strong>대상 서비스:</strong> 렌더팜 전체 서비스</p><br><p>점검 시간 동안에는 서비스 이용이 불가능하오니 양해 부탁드립니다.</p>">
                             <div class="flex justify-between items-center mb-1">
                                 <span class="bg-slate-100 text-slate-600 text-[11px] font-bold px-1.5 py-0.5 rounded">시설</span>
                                 <span class="text-slate-400 text-xs">2025.11.20</span>
                             </div>
                             <p class="text-slate-800 dark:text-gray-200 font-medium group-hover:text-purple-700 truncate">효빈 클라우드 렌더팜 정기 서버점검 안내 (12.01)</p>
                         </li>
-                        <li class="p-4 hover:bg-purple-50 dark:hover:bg-gray-700 transition cursor-pointer group" onclick="showToast('공지: 아카데미 모집')">
-                            <div class="flex justify-between items-center mb-1">
-                                <span class="bg-green-100 text-green-600 text-[11px] font-bold px-1.5 py-0.5 rounded">교육</span>
-                                <span class="text-slate-400 text-xs">2025.11.18</span>
-                            </div>
-                            <p class="text-slate-800 dark:text-gray-200 font-medium group-hover:text-purple-700 truncate">겨울방학 특강 '3D 캐릭터 모델링 기초' 수강생 모집</p>
-                        </li>
                     </ul>
                 </div>
             </div>
 
-            <!-- 오른쪽: 이달의 하이라이트 (이미지 배너) -->
+            <!-- 오른쪽: 하이라이트 -->
             <div class="md:w-1/2">
                 <div class="flex justify-between items-end mb-4">
                     <h2 class="text-2xl font-black text-slate-800 dark:text-white flex items-center gap-2">
@@ -233,10 +293,9 @@
                     </h2>
                 </div>
                 <div class="grid grid-cols-2 gap-4 h-[300px]">
-                    <!-- 배너 1 (크게) -->
-                    <div class="relative rounded-xl overflow-hidden group cursor-pointer shadow-md" onclick="showToast('한바다의 모험 홍보관')">
+                    <!-- 배너 1: 마스코트 (culture.html 연결) -->
+                    <div class="relative rounded-xl overflow-hidden group cursor-pointer shadow-md" onclick="openModal('한바다 극장판', '효빈시 마스코트 한바다의 모험!<br>2026년 여름 개봉 예정입니다.')">
                         <div class="absolute inset-0 bg-slate-200">
-                             <!-- 실제 이미지 대신 Placeholder -->
                              <div class="w-full h-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-bold text-center p-4">
                                 효빈시 마스코트<br>'한바다' 극장판<br>제작 확정!
                              </div>
@@ -247,22 +306,24 @@
                             <h3 class="font-bold text-lg leading-tight">효빈시 대표 캐릭터<br>애니메이션화</h3>
                         </div>
                     </div>
-                    <!-- 배너 2 & 3 (작게 분할) -->
+                    <!-- 배너 2 & 3 -->
                     <div class="flex flex-col gap-4">
-                        <div class="h-1/2 relative rounded-xl overflow-hidden group cursor-pointer shadow-md" onclick="showToast('HAF 자원봉사 모집')">
-                             <div class="w-full h-full bg-slate-800 flex items-center justify-center text-gray-400 text-sm">
-                                [포스터 이미지]
+                        <!-- 시티투어 (banner_3.html 연결) -->
+                        <div class="h-1/2 relative rounded-xl overflow-hidden group cursor-pointer shadow-md" onclick="location.href='banner_3.html'">
+                             <div class="w-full h-full bg-blue-800 flex items-center justify-center text-white text-sm">
+                                [효빈 시티투어]
                              </div>
                              <div class="absolute bottom-0 left-0 p-3 w-full bg-gradient-to-t from-black/80 to-transparent text-white">
-                                <p class="font-bold text-sm">HAF 2026 자원활동가 '효니' 모집</p>
+                                <p class="font-bold text-sm">효빈 시티투어 예약</p>
                              </div>
                         </div>
-                        <div class="h-1/2 relative rounded-xl overflow-hidden group cursor-pointer shadow-md" onclick="showToast('창작 스튜디오 입주안내')">
+                        <!-- 입주안내 (모달) -->
+                        <div class="h-1/2 relative rounded-xl overflow-hidden group cursor-pointer shadow-md" onclick="openModal('입주 안내', '1인 창작 스튜디오 입주자 추가 모집 중입니다.<br>월 임대료 무료, 관리비 별도.')">
                              <div class="w-full h-full bg-slate-100 flex items-center justify-center text-slate-400 text-sm border dark:bg-slate-700 dark:border-slate-600">
                                 <i data-lucide="monitor" class="w-8 h-8 mb-1"></i>
                              </div>
                              <div class="absolute bottom-0 left-0 p-3 w-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm">
-                                <p class="font-bold text-xs text-slate-800 dark:text-gray-200">1인 창작 스튜디오 입주자 추가 모집</p>
+                                <p class="font-bold text-xs text-slate-800 dark:text-gray-200">창작 스튜디오 입주 모집</p>
                              </div>
                         </div>
                     </div>
@@ -280,7 +341,8 @@
                 </div>
                 <h4 class="font-bold text-lg text-slate-800 dark:text-white">문의전화</h4>
                 <p class="text-slate-500 dark:text-gray-400 text-sm mt-1">평일 09:00 ~ 18:00</p>
-                <p class="text-2xl font-black text-purple-700 dark:text-purple-400 mt-1">079-555-TOON</p>
+                <!-- 전화번호 업데이트 -->
+                <p class="text-2xl font-black text-purple-700 dark:text-purple-400 mt-1">079-555-1921</p>
             </div>
             <div class="flex flex-col items-center md:items-start">
                 <div class="bg-white dark:bg-gray-700 p-3 rounded-full shadow-sm mb-3 text-purple-600 dark:text-purple-400">
@@ -288,24 +350,23 @@
                 </div>
                 <h4 class="font-bold text-lg text-slate-800 dark:text-white">오시는 길</h4>
                 <p class="text-slate-500 dark:text-gray-400 text-sm mt-1">효빈광역시 북구 영상문화로 24</p>
-                <p class="text-slate-500 dark:text-gray-400 text-sm">효빈디지털파크 3동</p>
-                <button class="text-xs font-bold text-purple-600 dark:text-purple-400 mt-2 hover:underline" onclick="showToast('지도 팝업')">지도보기 ></button>
+                <button class="text-xs font-bold text-purple-600 dark:text-purple-400 mt-2 hover:underline" onclick="openModal('오시는 길', '지하철 1호선 영상단지역 하차 3번 출구.<br>버스는 101, 202번 이용.')">지도보기 ></button>
             </div>
             <div class="flex flex-col items-center md:items-start">
                  <div class="bg-white dark:bg-gray-700 p-3 rounded-full shadow-sm mb-3 text-purple-600 dark:text-purple-400">
                     <i data-lucide="mail" class="w-6 h-6"></i>
                 </div>
                 <h4 class="font-bold text-lg text-slate-800 dark:text-white">뉴스레터 구독</h4>
-                <p class="text-slate-500 dark:text-gray-400 text-sm mt-1 mb-3">최신 지원사업 및 행사 소식을 받아보세요.</p>
+                <p class="text-slate-500 dark:text-gray-400 text-sm mt-1 mb-3">최신 소식을 받아보세요.</p>
                 <div class="flex w-full max-w-xs">
                     <input type="email" placeholder="이메일 주소" class="flex-grow px-3 py-2 text-sm border border-slate-300 rounded-l-lg outline-none focus:border-purple-500 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
-                    <button class="bg-purple-600 text-white px-4 py-2 text-sm font-bold rounded-r-lg hover:bg-purple-700 transition" onclick="showToast('구독 신청 완료')">신청</button>
+                    <button class="bg-purple-600 text-white px-4 py-2 text-sm font-bold rounded-r-lg hover:bg-purple-700 transition" onclick="openModal('구독 완료', '뉴스레터 구독 신청이 완료되었습니다.')">신청</button>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 7. 푸터 (심플형) -->
+    <!-- 7. 푸터 -->
     <footer class="bg-slate-900 text-slate-400 py-8 text-sm">
         <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex flex-col items-center md:items-start gap-2">
@@ -315,92 +376,120 @@
                 <p>Copyright © Hyobin Animation HQ. All rights reserved.</p>
             </div>
             <div class="flex gap-4">
-                <a href="#" class="hover:text-white" onclick="showToast('이용약관')">이용약관</a>
-                <a href="#" class="hover:text-white font-bold text-slate-200" onclick="showToast('개인정보처리방침')">개인정보처리방침</a>
-                <a href="#" class="hover:text-white" onclick="showToast('이메일무단수집거부')">이메일무단수집거부</a>
+                <button class="hover:text-white" onclick="openModal('이용약관', '본 약관은 효빈애니메이션본부 홈페이지 이용에 관한...')">이용약관</button>
+                <button class="hover:text-white font-bold text-slate-200" onclick="openModal('개인정보처리방침', '개인정보 보호법에 따라 이용자의 개인정보를 보호하고...')">개인정보처리방침</button>
             </div>
         </div>
     </footer>
 
-    <!-- Toast Container -->
-    <div id="toast-container">
-        <i data-lucide="info" class="w-5 h-5"></i>
-        <span id="toast-message">알림</span>
+    <!-- 통합 팝업 모달 -->
+    <div id="common-modal" class="modal fixed inset-0 z-50 flex items-center justify-center px-4">
+        <!-- 배경 -->
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeModal()"></div>
+        <!-- 콘텐츠 -->
+        <div class="modal-content bg-white dark:bg-gray-800 w-full max-w-md rounded-2xl shadow-2xl overflow-hidden relative z-10">
+            <div class="bg-purple-700 p-4 text-white flex justify-between items-center">
+                <h3 class="font-bold text-lg" id="modal-title">알림</h3>
+                <button onclick="closeModal()" class="hover:bg-purple-600 p-1 rounded-full"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <div class="p-6">
+                <p id="modal-body" class="text-slate-700 dark:text-gray-300 leading-relaxed mb-6">내용이 들어갑니다.</p>
+                <div class="flex justify-end gap-2">
+                    <button onclick="closeModal()" class="bg-slate-200 text-slate-700 px-4 py-2 rounded-lg font-bold hover:bg-slate-300 transition text-sm">닫기</button>
+                    <!-- 필요 시 확인 버튼 등 추가 가능 -->
+                    <button onclick="closeModal()" class="bg-purple-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-purple-700 transition text-sm">확인</button>
+                </div>
+            </div>
+        </div>
     </div>
 
+    <!-- 스크립트 -->
     <script>
-        // DOMContentLoaded 이벤트 리스너: DOM이 완전히 로드된 후 실행
+        // DOM 로드 완료 후 실행
         document.addEventListener('DOMContentLoaded', () => {
-            // 안전하게 Lucide 아이콘 초기화
+            // Lucide 아이콘 초기화
             if (typeof lucide !== 'undefined' && lucide.createIcons) {
-                try {
-                    lucide.createIcons();
-                } catch (e) {
-                    console.error("Lucide Icon Error:", e);
-                }
-            } else {
-                console.warn("Lucide library not loaded.");
+                try { lucide.createIcons(); } catch (e) { console.log('Icons not loaded'); }
             }
-
-            // 다크모드 초기화 (예외 처리 추가)
-            checkDarkMode();
+            // 초기 페이지 설정
+            changePage(0);
         });
 
-        // Dark Mode Logic (LocalStorage 연동 - try/catch 포함)
-        function checkDarkMode() {
-            try {
-                const isDark = localStorage.getItem('theme') === 'dark';
-                if (isDark) {
-                    document.body.classList.add('dark');
-                } else {
-                    document.body.classList.remove('dark');
-                }
-                updateThemeBtn();
-            } catch (e) {
-                // localStorage 접근 차단 시 기본값(라이트모드) 유지 및 오류 무시
-                console.warn("LocalStorage access denied or error:", e);
-                document.body.classList.remove('dark');
-            }
-        }
-
+        // 다크모드 토글
         function toggleDarkMode() {
-            try {
-                const isDark = document.body.classList.toggle('dark');
-                localStorage.setItem('theme', isDark ? 'dark' : 'light');
-                updateThemeBtn();
-                showToast(isDark ? '다크 모드가 적용되었습니다.' : '라이트 모드가 적용되었습니다.');
-            } catch (e) {
-                // LocalStorage 오류 시 토글만 수행하고 저장하지 않음
-                console.warn("LocalStorage save error:", e);
-                // 강제로 클래스 토글은 진행하여 UI 반응성 유지
-                const isNowDark = document.body.classList.contains('dark');
-                showToast(isNowDark ? '다크 모드가 적용되었습니다. (저장불가)' : '라이트 모드가 적용되었습니다. (저장불가)');
-            }
-        }
-
-        function updateThemeBtn() {
+            document.body.classList.toggle('dark');
+            const isDark = document.body.classList.contains('dark');
             const btn = document.getElementById('theme-btn');
-            if(btn) {
-                const isDark = document.body.classList.contains('dark');
-                btn.textContent = isDark ? 'Light Mode' : 'Dark Mode';
-            }
+            if(btn) btn.textContent = isDark ? 'Light Mode' : 'Dark Mode';
+            
+            openModal('테마 변경', isDark ? '다크 모드가 적용되었습니다.' : '라이트 모드가 적용되었습니다.');
         }
 
-        // Toast Logic
-        let toastTimeout;
-        function showToast(msg) {
-            const container = document.getElementById('toast-container');
-            const messageSpan = document.getElementById('toast-message');
-            if(container && messageSpan) {
-                messageSpan.textContent = msg;
-                container.classList.add('show');
-                if (toastTimeout) clearTimeout(toastTimeout);
-                toastTimeout = setTimeout(() => {
-                    container.classList.remove('show');
-                }, 3000);
-            } else {
-                alert(msg); // 토스트 컨테이너가 없을 경우 fallback
+        // 모달 열기 함수
+        function openModal(title, content) {
+            const modal = document.getElementById('common-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalBody = document.getElementById('modal-body');
+            
+            modalTitle.textContent = title;
+            modalBody.innerHTML = content; // HTML 태그 지원을 위해 innerHTML 사용
+            
+            modal.classList.add('active');
+        }
+
+        // 공지사항 모달 열기 함수 (상세 내용 포함)
+        function openNoticeModal(element) {
+            const title = element.getAttribute('data-title');
+            const date = element.getAttribute('data-date');
+            const content = element.getAttribute('data-content');
+            
+            const modalContent = `
+                <div class="mb-2 text-sm text-slate-500">작성일: ${date}</div>
+                <h4 class="text-xl font-bold text-slate-800 dark:text-white mb-4">${title}</h4>
+                <div class="text-slate-700 dark:text-gray-300 leading-relaxed">
+                    ${content}
+                </div>
+            `;
+            
+            openModal('공지사항 상세', modalContent);
+        }
+
+        // 모달 닫기 함수
+        function closeModal() {
+            const modal = document.getElementById('common-modal');
+            modal.classList.remove('active');
+        }
+
+        // 페이지네이션 함수
+        const totalPages = 2;
+        function changePage(newIndex) {
+            if (newIndex < 0 || newIndex >= totalPages) return;
+
+            // 모든 페이지 숨기기
+            document.querySelectorAll('.menu-page').forEach(page => { 
+                page.classList.remove('active'); 
+            });
+
+            // 선택한 페이지 보이기
+            const newPage = document.getElementById(`page-${newIndex}`);
+            if (newPage) {
+                newPage.style.display = 'grid'; 
+                // 강제 리플로우
+                void newPage.offsetWidth; 
+                newPage.classList.add('active');
             }
+
+            // 도트 업데이트
+            document.querySelectorAll('.dot').forEach((dot, i) => {
+                if (i === newIndex) { 
+                    dot.classList.remove('bg-slate-300'); 
+                    dot.classList.add('bg-purple-600'); 
+                } 
+                else { 
+                    dot.classList.remove('bg-purple-600'); 
+                    dot.classList.add('bg-slate-300'); 
+                }
+            });
         }
     </script>
 </body>
