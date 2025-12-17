@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESG 안전환경경영 - 효빈교통공사</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans KR', sans-serif; }
+        .hb-logo { font-family: sans-serif; font-weight: 900; letter-spacing: -2px; }
+        
+        /* ESG 카드 스타일 */
+        .esg-card { transition: all 0.3s ease; }
+        .esg-card:hover { transform: translateY(-10px); }
+        
+        /* 탭 메뉴 활성화 스타일 */
+        .tab-btn.active { background-color: #0ea5e9; color: white; border-color: #0ea5e9; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex flex-col">
+
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-2 group">
+                <img src="images/logo.png" onerror="this.style.display='none'" class="h-8 w-auto">
+                <div class="text-3xl font-black text-sky-600 hb-logo">HB</div>
+                <span class="text-lg font-bold text-gray-800">ESG 경영</span>
+            </a>
+            <a href="index.html" class="text-gray-500 hover:text-black"><i class="fa-solid fa-xmark text-2xl"></i></a>
+        </div>
+    </header>
+
+    <section class="relative bg-emerald-800 text-white py-24 px-4 overflow-hidden">
+        <div class="absolute inset-0 opacity-20 bg-[url('https://placehold.co/1920x600/064e3b/ffffff?text=Nature+Pattern')] bg-cover bg-center"></div>
+        <div class="max-w-6xl mx-auto relative z-10 text-center">
+            <span class="bg-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-full mb-6 inline-block shadow-md">Sustainable Management</span>
+            <h1 class="text-4xl md:text-6xl font-black mb-6 leading-tight">내일의 도시를 위한<br>가장 투명하고 안전한 약속</h1>
+            <p class="text-emerald-100 text-lg md:text-xl font-medium max-w-3xl mx-auto">
+                효빈교통공사는 환경(E), 사회(S), 지배구조(G) 경영을 통해<br>
+                시민과 함께 지속 가능한 미래를 만들어갑니다.
+            </p>
+        </div>
+    </section>
+
+    <main class="max-w-6xl mx-auto px-4 py-16 flex-grow w-full space-y-20">
+        
+        <section>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="esg-card bg-white rounded-2xl p-8 border-t-8 border-green-500 shadow-lg text-center group">
+                    <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6 text-3xl group-hover:scale-110 transition">
+                        <i class="fa-solid fa-leaf"></i>
+                    </div>
+                    <h2 class="text-2xl font-black text-gray-800 mb-2">Environment</h2>
+                    <h3 class="text-lg font-bold text-green-600 mb-4">친환경 녹색경영</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">
+                        탄소 중립 실현 및 에너지 효율화<br>
+                        쾌적한 역사 공기질 관리<br>
+                        자원 순환형 에코 시스템 구축
+                    </p>
+                </div>
+
+                <div class="esg-card bg-white rounded-2xl p-8 border-t-8 border-blue-500 shadow-lg text-center group">
+                    <div class="w-20 h-20 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-6 text-3xl group-hover:scale-110 transition">
+                        <i class="fa-solid fa-hand-holding-heart"></i>
+                    </div>
+                    <h2 class="text-2xl font-black text-gray-800 mb-2">Social</h2>
+                    <h3 class="text-lg font-bold text-blue-600 mb-4">안전·포용경영</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">
+                        <strong>절대 안전(Safety First)</strong> 원칙 준수<br>
+                        교통약자 이동권 및 복지 강화<br>
+                        지역 사회 공헌 및 동반 성장
+                    </p>
+                </div>
+
+                <div class="esg-card bg-white rounded-2xl p-8 border-t-8 border-orange-500 shadow-lg text-center group">
+                    <div class="w-20 h-20 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mx-auto mb-6 text-3xl group-hover:scale-110 transition">
+                        <i class="fa-solid fa-scale-balanced"></i>
+                    </div>
+                    <h2 class="text-2xl font-black text-gray-800 mb-2">Governance</h2>
+                    <h3 class="text-lg font-bold text-orange-600 mb-4">투명·윤리경영</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">
+                        투명한 이사회 및 의사결정 구조<br>
+                        반부패·청렴 문화 정착<br>
+                        시민 참여형 거버넌스 확대
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="space-y-16">
+            
+            <div class="flex flex-col lg:flex-row items-center gap-10 bg-green-50 rounded-3xl p-8 md:p-12 border border-green-100">
+                <div class="lg:w-1/3 text-center">
+                    <div class="relative w-48 h-48 mx-auto bg-white rounded-full border-4 border-green-400 p-2 shadow-xl mb-4">
+                        <img src="images/char_3_sd.png" onerror="this.src='https://placehold.co/200x200?text=Park+Lami'" class="w-full h-full object-cover rounded-full">
+                        <div class="absolute bottom-0 right-0 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full">홍보대사: 박라미</div>
+                    </div>
+                    <p class="text-green-800 font-bold text-lg">"지구를 지키는 에코 메트로!"</p>
+                </div>
+                <div class="lg:w-2/3">
+                    <h3 class="text-2xl font-black text-gray-800 mb-6 border-b-2 border-green-200 pb-2">환경(Environment) 주요 성과</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-4">
+                            <span class="w-8 h-8 rounded-full bg-green-200 text-green-700 flex items-center justify-center font-bold flex-shrink-0">1</span>
+                            <div>
+                                <h4 class="font-bold text-gray-800">지하 역사 공기질 개선 프로젝트</h4>
+                                <p class="text-sm text-gray-600">전 역사에 대용량 공기청정기 및 미세먼지 측정기 설치 완료. (법적 기준 대비 30% 저감 목표 달성)</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <span class="w-8 h-8 rounded-full bg-green-200 text-green-700 flex items-center justify-center font-bold flex-shrink-0">2</span>
+                            <div>
+                                <h4 class="font-bold text-gray-800">친환경 에너지 역사 구축</h4>
+                                <p class="text-sm text-gray-600">지상 역사(포성산역 등) 태양광 패널 설치 및 전 역사 LED 조명 100% 교체로 온실가스 감축.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <span class="w-8 h-8 rounded-full bg-green-200 text-green-700 flex items-center justify-center font-bold flex-shrink-0">3</span>
+                            <div>
+                                <h4 class="font-bold text-gray-800">에코 굿즈 캠페인</h4>
+                                [cite_start]<p class="text-sm text-gray-600">폐근무복을 활용한 에코백 제작 등 자원 순환 프로젝트 '리사이클 효빈' 추진[cite: 1303].</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="flex flex-col lg:flex-row-reverse items-center gap-10 bg-blue-50 rounded-3xl p-8 md:p-12 border border-blue-100">
+                <div class="lg:w-1/3 text-center">
+                    <div class="relative w-48 h-48 mx-auto bg-white rounded-full border-4 border-blue-400 p-2 shadow-xl mb-4 flex justify-center items-center gap-2 overflow-hidden">
+                        <img src="images/char_1_sd.png" class="w-1/2 object-cover" onerror="this.style.display='none'">
+                        <img src="images/char_5_sd.png" class="w-1/2 object-cover" onerror="this.style.display='none'">
+                        <div class="absolute bottom-0 right-0 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full">홍보대사: 고나미 & 미소하</div>
+                    </div>
+                    <p class="text-blue-800 font-bold text-lg">"안전과 복지는 타협할 수 없어요!"</p>
+                </div>
+                <div class="lg:w-2/3">
+                    <h3 class="text-2xl font-black text-gray-800 mb-6 border-b-2 border-blue-200 pb-2">사회(Social) - 안전 및 포용</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-4">
+                            <span class="w-8 h-8 rounded-full bg-blue-200 text-blue-700 flex items-center justify-center font-bold flex-shrink-0">1</span>
+                            <div>
+                                <h4 class="font-bold text-gray-800">Safety First (절대 안전)</h4>
+                                [cite_start]<p class="text-sm text-gray-600">365일 24시간 종합관제실 가동, 노후 전동차 선제적 교체, '안전 불감증 Zero' 캠페인 진행[cite: 1469].</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <span class="w-8 h-8 rounded-full bg-blue-200 text-blue-700 flex items-center justify-center font-bold flex-shrink-0">2</span>
+                            <div>
+                                <h4 class="font-bold text-gray-800">Barrier-Free (무장애 역사)</h4>
+                                [cite_start]<p class="text-sm text-gray-600">1역 1동선 엘리베이터 확보, 청각장애인용 히어링 루프 설치, 교통약자 One-Stop 케어 서비스 운영[cite: 1115].</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <span class="w-8 h-8 rounded-full bg-blue-200 text-blue-700 flex items-center justify-center font-bold flex-shrink-0">3</span>
+                            <div>
+                                <h4 class="font-bold text-gray-800">지역사회 상생</h4>
+                                [cite_start]<p class="text-sm text-gray-600">구도심(중구, 북구) 상권 활성화를 위한 테마 역사 조성 및 청년 '블루 버드 멘토단' 일자리 창출[cite: 1645].</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="flex flex-col lg:flex-row items-center gap-10 bg-orange-50 rounded-3xl p-8 md:p-12 border border-orange-100">
+                <div class="lg:w-1/3 text-center">
+                    <div class="relative w-48 h-48 mx-auto bg-white rounded-full border-4 border-orange-400 p-2 shadow-xl mb-4">
+                        <img src="images/char_4_sd.png" onerror="this.src='https://placehold.co/200x200?text=Da+Rona'" class="w-full h-full object-cover rounded-full">
+                        <div class="absolute bottom-0 right-0 bg-orange-600 text-white text-xs font-bold px-3 py-1 rounded-full">홍보대사: 다로나</div>
+                    </div>
+                    <p class="text-orange-800 font-bold text-lg">"불공정은 NO! 원칙은 YES!"</p>
+                </div>
+                <div class="lg:w-2/3">
+                    <h3 class="text-2xl font-black text-gray-800 mb-6 border-b-2 border-orange-200 pb-2">지배구조(Governance) - 윤리경영</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-4">
+                            <span class="w-8 h-8 rounded-full bg-orange-200 text-orange-700 flex items-center justify-center font-bold flex-shrink-0">1</span>
+                            <div>
+                                <h4 class="font-bold text-gray-800">클린(Clean) 효빈 선포</h4>
+                                <p class="text-sm text-gray-600">부패·청탁 제로(Zero)화, 공익 제보자 보호 시스템 강화 및 윤리 경영 위원회 운영.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <span class="w-8 h-8 rounded-full bg-orange-200 text-orange-700 flex items-center justify-center font-bold flex-shrink-0">2</span>
+                            <div>
+                                <h4 class="font-bold text-gray-800">투명한 정보 공개</h4>
+                                [cite_start]<p class="text-sm text-gray-600">경영 공시 의무화, 시민 모니터링단 운영을 통해 공사 운영의 투명성을 확보합니다[cite: 954].</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <span class="w-8 h-8 rounded-full bg-orange-200 text-orange-700 flex items-center justify-center font-bold flex-shrink-0">3</span>
+                            <div>
+                                <h4 class="font-bold text-gray-800">노사 화합 및 인권 경영</h4>
+                                <p class="text-sm text-gray-600">상호 존중의 노사 문화 정착 및 전 직원 인권 교육 의무화 실시.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 text-xs py-8 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <div class="mb-4">
+                <span class="text-2xl font-black text-sky-600 tracking-tighter mr-2">HB</span>
+                <span class="font-bold text-white">효빈교통공사</span>
+            </div>
+            <p>Copyright 2016. 효빈교통공사 All right reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

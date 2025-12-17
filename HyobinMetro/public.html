@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>정보공개 - 효빈교통공사</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans KR', sans-serif; }
+        .hb-logo { font-family: sans-serif; font-weight: 900; letter-spacing: -2px; }
+        
+        /* 테이블 스타일 */
+        .info-table th { background-color: #f1f5f9; color: #334155; font-weight: 700; border-bottom: 2px solid #e2e8f0; text-align: left; }
+        .info-table td { border-bottom: 1px solid #e2e8f0; color: #475569; }
+        .info-table tr:last-child td { border-bottom: none; }
+        
+        /* 탭 스타일 */
+        .tab-btn { transition: all 0.3s; border-bottom: 3px solid transparent; }
+        .tab-btn.active { border-color: #0ea5e9; color: #0ea5e9; font-weight: bold; }
+        .tab-content { display: none; animation: fadeIn 0.5s; }
+        .tab-content.active { display: block; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex flex-col">
+
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-2 group">
+                <img src="images/logo.png" onerror="this.style.display='none'" class="h-8 w-auto">
+                <div class="text-3xl font-black text-sky-600 hb-logo">HB</div>
+                <span class="text-lg font-bold text-gray-800">정보공개</span>
+            </a>
+            <a href="index.html" class="text-gray-500 hover:text-black"><i class="fa-solid fa-xmark text-2xl"></i></a>
+        </div>
+    </header>
+
+    <section class="bg-slate-800 text-white py-20 px-4 text-center relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[url('https://placehold.co/1920x600/1e293b/ffffff?text=Open+Data')] bg-cover bg-center"></div>
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <h1 class="text-3xl md:text-5xl font-black mb-4">투명한 경영, 열린 정보</h1>
+            <p class="text-slate-300 text-lg">효빈교통공사는 시민의 알 권리를 보장하고 경영 투명성을 높이기 위해<br>주요 경영 정보를 적극적으로 공개하고 있습니다.</p>
+        </div>
+    </section>
+
+    <div class="bg-white border-b border-gray-200 shadow-sm sticky top-16 z-40">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex space-x-8 overflow-x-auto whitespace-nowrap">
+                <button onclick="switchTab('general')" class="tab-btn active py-4 px-2 text-slate-500 hover:text-sky-600" id="btn-general">일반 현황</button>
+                <button onclick="switchTab('finance')" class="tab-btn py-4 px-2 text-slate-500 hover:text-sky-600" id="btn-finance">재무 정보</button>
+                <button onclick="switchTab('project')" class="tab-btn py-4 px-2 text-slate-500 hover:text-sky-600" id="btn-project">사업 계획</button>
+                <button onclick="switchTab('data')" class="tab-btn py-4 px-2 text-slate-500 hover:text-sky-600" id="btn-data">공공 데이터</button>
+            </div>
+        </div>
+    </div>
+
+    <main class="max-w-6xl mx-auto px-4 py-16 flex-grow w-full">
+        
+        <div id="tab-general" class="tab-content active space-y-10">
+            <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
+                <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-building text-sky-600 mr-3"></i>기관 개요</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 text-sm">
+                    <div class="flex border-b border-slate-100 pb-2">
+                        <span class="w-32 font-bold text-slate-600">기관명</span>
+                        <span class="text-slate-800">효빈교통공사 (HYOBIN METRO)</span>
+                    </div>
+                    <div class="flex border-b border-slate-100 pb-2">
+                        <span class="w-32 font-bold text-slate-600">대표자</span>
+                        <span class="text-slate-800">최대현</span>
+                    </div>
+                    <div class="flex border-b border-slate-100 pb-2">
+                        <span class="w-32 font-bold text-slate-600">설립일</span>
+                        <span class="text-slate-800">2016년 7월 9일 (전신: 효빈도시공사 도시철도본부)</span>
+                    </div>
+                    <div class="flex border-b border-slate-100 pb-2">
+                        <span class="w-32 font-bold text-slate-600">주무부처</span>
+                        <span class="text-slate-800">효빈광역시 (지분율 100%)</span>
+                    </div>
+                    <div class="flex border-b border-slate-100 pb-2">
+                        <span class="w-32 font-bold text-slate-600">임직원 수</span>
+                        <span class="text-slate-800">13,937명 (2022년 말 기준)</span>
+                    </div>
+                    <div class="flex border-b border-slate-100 pb-2">
+                        <span class="w-32 font-bold text-slate-600">본사 소재지</span>
+                        <span class="text-slate-800">효빈광역시 북구 효빈로 79</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
+                <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-train-subway text-sky-600 mr-3"></i>운영 현황</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center mb-8">
+                    <div class="bg-slate-50 p-4 rounded-xl">
+                        <p class="text-slate-500 text-xs font-bold mb-1">운영 노선</p>
+                        <p class="text-2xl font-black text-slate-800">9개 <span class="text-xs font-normal text-slate-400">노선</span></p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-xl">
+                        <p class="text-slate-500 text-xs font-bold mb-1">총 연장</p>
+                        <p class="text-2xl font-black text-slate-800">409.09 <span class="text-xs font-normal text-slate-400">km</span></p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-xl">
+                        <p class="text-slate-500 text-xs font-bold mb-1">운영 역수</p>
+                        <p class="text-2xl font-black text-slate-800">282 <span class="text-xs font-normal text-slate-400">개역</span></p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-xl">
+                        <p class="text-slate-500 text-xs font-bold mb-1">일평균 수송</p>
+                        <p class="text-2xl font-black text-slate-800">386 <span class="text-xs font-normal text-slate-400">만명</span></p>
+                    </div>
+                </div>
+                <table class="w-full text-sm text-left info-table">
+                    <thead>
+                        <tr>
+                            <th class="p-3">노선명</th>
+                            <th class="p-3">기점-종점</th>
+                            <th class="p-3">거리(km)</th>
+                            <th class="p-3">개통일</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="p-3 font-bold text-[#0077DD]">1호선</td><td class="p-3">곽암해수욕장 ↔ 장선</td><td class="p-3">107.7</td><td class="p-3">1984.12.02</td></tr>
+                        <tr><td class="p-3 font-bold text-[#00CCAA]">2호선</td><td class="p-3">중앙로 순환</td><td class="p-3">57.21</td><td class="p-3">1989.02.03</td></tr>
+                        <tr><td class="p-3 font-bold text-[#FFCC11]">3호선</td><td class="p-3">팔조 ↔ 효빈국제공항</td><td class="p-3">32.61</td><td class="p-3">1994.02.09</td></tr>
+                        <tr><td class="p-3 font-bold text-[#FF5522]">4호선</td><td class="p-3">해운산업지구 ↔ 천가</td><td class="p-3">40.46</td><td class="p-3">2003.03.05</td></tr>
+                        <tr><td class="p-3 font-bold text-[#EE0022]">5호선</td><td class="p-3">청덕공원 ↔ 포성산</td><td class="p-3">22.81</td><td class="p-3">2011.05.08</td></tr>
+                        <tr><td class="p-3 font-bold text-[#881188]">6호선</td><td class="p-3">마잡 ↔ 고송나루</td><td class="p-3">21.61</td><td class="p-3">2016.04.03</td></tr>
+                        <tr><td class="p-3 font-bold text-[#FF8899]">7호선</td><td class="p-3">어간중앙 ↔ 효빈대입구</td><td class="p-3">23.59</td><td class="p-3">1931.04.05</td></tr>
+                        <tr><td class="p-3 font-bold text-[#9856FF]">8호선</td><td class="p-3">곽산 ↔ 신흥</td><td class="p-3">15.17</td><td class="p-3">2024.03.04</td></tr>
+                        <tr><td class="p-3 font-bold text-[#6677CC]">빈효선</td><td class="p-3">효빈항 ↔ 고남</td><td class="p-3">87.89</td><td class="p-3">2017.05.02</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="tab-finance" class="tab-content space-y-10">
+            <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
+                <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-chart-line text-sky-600 mr-3"></i>2024년도 주요 재무 현황</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-right info-table">
+                        <thead class="text-center">
+                            <tr>
+                                <th class="p-4 w-1/4">구분</th>
+                                <th class="p-4 w-3/4">금액 (단위: 원)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="p-4 text-center font-bold bg-slate-50">자산 총액</td>
+                                <td class="p-4 text-slate-800 font-bold text-lg">20,183,383,362,684</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 text-center font-bold bg-slate-50">부채 총액</td>
+                                <td class="p-4 text-red-600">400,016,806,518</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 text-center font-bold bg-slate-50">자본금</td>
+                                <td class="p-4 text-slate-800">22,764,328,965,891</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 text-center font-bold bg-slate-50">매출액</td>
+                                <td class="p-4 text-slate-800">3,068,192,612,476</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 text-center font-bold bg-slate-50">영업 이익</td>
+                                <td class="p-4 text-blue-600 font-bold">+1,282,472,720</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 text-center font-bold bg-slate-50">당기 순이익</td>
+                                <td class="p-4 text-blue-600 font-bold text-lg">+537,485,082,026</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="text-xs text-slate-400 mt-4 text-right">* 2024년 결산 기준 (단위: 원)</p>
+            </div>
+        </div>
+
+        <div id="tab-project" class="tab-content space-y-10">
+            <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
+                <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-helmet-safety text-sky-600 mr-3"></i>건설 및 추진 사업</h2>
+                
+                <div class="mb-8">
+                    <h3 class="text-lg font-bold text-slate-700 mb-3 border-l-4 border-sky-500 pl-3">🚧 건설 중인 노선 (개통 예정)</h3>
+                    <table class="w-full text-sm text-left info-table">
+                        <thead>
+                            <tr>
+                                <th class="p-3">노선명</th>
+                                <th class="p-3">구간</th>
+                                <th class="p-3">규모</th>
+                                <th class="p-3">개통예정</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="p-3 font-bold"><span class="text-[#33aaff]">●</span> 창전선</td>
+                                <td class="p-3">팔조 ↔ 하성천</td>
+                                <td class="p-3">12.68km (14개역)</td>
+                                <td class="p-3 font-bold text-sky-600">2027.09.29</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold"><span class="text-[#EE0022]">●</span> 5호선 연장</td>
+                                <td class="p-3">포성산 ↔ 하미</td>
+                                <td class="p-3">21.1km (5개역)</td>
+                                <td class="p-3 font-bold text-sky-600">2032.05.11</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold"><span class="text-[#0054A6]">●</span> 빈효선 연장</td>
+                                <td class="p-3">고남 ↔ 부진</td>
+                                <td class="p-3">3.22km (1개역)</td>
+                                <td class="p-3 font-bold text-sky-600">2030.04.30</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-bold text-slate-700 mb-3 border-l-4 border-green-500 pl-3">📋 계획 및 추진 노선</h3>
+                    <table class="w-full text-sm text-left info-table">
+                        <thead>
+                            <tr>
+                                <th class="p-3">노선명</th>
+                                <th class="p-3">구간</th>
+                                <th class="p-3">비고</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="p-3 font-bold text-slate-700">청엽선</td>
+                                <td class="p-3">엽월대 ↔ 청엽국제학교 (약 15.3km)</td>
+                                <td class="p-3">2036년 목표</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold text-slate-700">안천선</td>
+                                <td class="p-3">안천중앙 ↔ 이자중앙 (약 20.3km)</td>
+                                <td class="p-3">타당성 조사 중</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold text-slate-700">9호선</td>
+                                <td class="p-3">북고송 ↔ 흑택 (약 30km)</td>
+                                <td class="p-3">장기 계획</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-data" class="tab-content space-y-10">
+            <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
+                <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center"><i class="fa-solid fa-database text-sky-600 mr-3"></i>공공 데이터 개방</h2>
+                <p class="text-slate-500 mb-6 text-sm">효빈교통공사가 보유한 데이터를 파일 형태로 다운로드하실 수 있습니다.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <a href="#" class="block p-5 border border-slate-200 rounded-xl hover:bg-slate-50 hover:border-sky-300 transition group" onclick="alert('파일 다운로드 준비 중입니다.')">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="font-bold text-slate-800 group-hover:text-sky-600 mb-1">2024년도 역별 승하차 인원 통계</h3>
+                                <p class="text-xs text-slate-400">갱신일: 2025-01-10 | 형식: CSV</p>
+                            </div>
+                            <i class="fa-solid fa-file-csv text-2xl text-green-500"></i>
+                        </div>
+                    </a>
+                    <a href="#" class="block p-5 border border-slate-200 rounded-xl hover:bg-slate-50 hover:border-sky-300 transition group" onclick="alert('파일 다운로드 준비 중입니다.')">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="font-bold text-slate-800 group-hover:text-sky-600 mb-1">전동차 시간표 데이터 (전 노선)</h3>
+                                <p class="text-xs text-slate-400">갱신일: 2025-03-01 | 형식: XLSX</p>
+                            </div>
+                            <i class="fa-solid fa-file-excel text-2xl text-green-600"></i>
+                        </div>
+                    </a>
+                    <a href="#" class="block p-5 border border-slate-200 rounded-xl hover:bg-slate-50 hover:border-sky-300 transition group" onclick="alert('파일 다운로드 준비 중입니다.')">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="font-bold text-slate-800 group-hover:text-sky-600 mb-1">역사 내 편의시설 현황 (엘리베이터 등)</h3>
+                                <p class="text-xs text-slate-400">갱신일: 2024-12-31 | 형식: JSON</p>
+                            </div>
+                            <i class="fa-solid fa-file-code text-2xl text-yellow-500"></i>
+                        </div>
+                    </a>
+                    <a href="#" class="block p-5 border border-slate-200 rounded-xl hover:bg-slate-50 hover:border-sky-300 transition group" onclick="alert('파일 다운로드 준비 중입니다.')">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="font-bold text-slate-800 group-hover:text-sky-600 mb-1">효빈 도시철도 노선도 벡터 이미지</h3>
+                                <p class="text-xs text-slate-400">갱신일: 2024-03-04 | 형식: AI/PDF</p>
+                            </div>
+                            <i class="fa-solid fa-file-pdf text-2xl text-red-500"></i>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 text-xs py-8 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <div class="mb-4">
+                <span class="text-2xl font-black text-sky-600 tracking-tighter mr-2">HB</span>
+                <span class="font-bold text-white">효빈교통공사</span>
+            </div>
+            <p>Copyright 2016. 효빈교통공사 All right reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function switchTab(tabName) {
+            // 버튼 스타일 초기화
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            // 컨텐츠 숨기기
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            // 선택된 탭 활성화
+            document.getElementById('btn-' + tabName).classList.add('active');
+            document.getElementById('tab-' + tabName).classList.add('active');
+        }
+    </script>
+
+</body>
+</html>
